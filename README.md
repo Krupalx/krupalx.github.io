@@ -1,1 +1,0 @@
-# krupalx.github.io
