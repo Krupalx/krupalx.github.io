@@ -10,20 +10,27 @@
       text-align: center;
       padding: 20px;
     }
+
     input {
       margin: 6px;
       padding: 8px;
       width: 260px;
     }
+
     button {
       padding: 10px 18px;
       margin-top: 10px;
       cursor: pointer;
     }
+
     #output {
       margin-top: 20px;
       font-size: 18px;
       white-space: pre-wrap;
+    }
+
+    .key-box {
+      width: 400px;
     }
   </style>
 </head>
@@ -32,6 +39,10 @@
 
 <h1>💀 Roast Me AI</h1>
 
+<!-- API KEY INPUT -->
+<input id="apiKey" class="key-box" placeholder="Paste your Gemini API key here"><br><br>
+
+<!-- USER FIELDS -->
 <input id="name" placeholder="Name"><br>
 <input id="age" placeholder="Age"><br>
 <input id="hobby" placeholder="Hobby"><br>
@@ -47,6 +58,13 @@
 
 <script>
 async function roast() {
+
+  const apiKey = document.getElementById("apiKey").value;
+
+  if (!apiKey) {
+    output.innerText = "Please enter API key first 💀";
+    return;
+  }
 
   const data = {
     name: name.value,
@@ -73,7 +91,7 @@ Embarrassing moment: ${data.embarrassing}
 Rules:
 - Roast the user in a funny way
 - NO hate, NO slurs, NO discrimination
-- ONE short paragraph only
+- ONLY one short paragraph
 - No questions, no explanations
 `;
 
@@ -83,7 +101,7 @@ Rules:
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-goog-api-key": "PASTE_YOUR_API_KEY_HERE"
+        "X-goog-api-key": apiKey
       },
       body: JSON.stringify({
         contents: [
