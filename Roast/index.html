@@ -1,1 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Roast Me AI</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f0f0f;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    input {
+      margin: 6px;
+      padding: 8px;
+      width: 260px;
+    }
+    button {
+      padding: 10px 18px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    #output {
+      margin-top: 20px;
+      font-size: 18px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
 
+<body>
+
+<h1>💀 Roast Me AI</h1>
+
+<input id="name" placeholder="Name"><br>
+<input id="age" placeholder="Age"><br>
+<input id="hobby" placeholder="Hobby"><br>
+<input id="trait" placeholder="Personality trait"><br>
+<input id="fear" placeholder="Fear"><br>
+<input id="habit" placeholder="Bad habit"><br>
+<input id="embarrassing" placeholder="Embarrassing moment"><br>
+
+<br>
+<button onclick="roast()">Get Roasted</button>
+
+<div id="output"></div>
+
+<script>
+async function roast() {
+
+  const data = {
+    name: name.value,
+    age: age.value,
+    hobby: hobby.value,
+    trait: trait.value,
+    fear: fear.value,
+    habit: habit.value,
+    embarrassing: embarrassing.value
+  };
+
+  const prompt = `
+You are a savage but funny roast generator.
+
+User data:
+Name: ${data.name}
+Age: ${data.age}
+Hobby: ${data.hobby}
+Personality: ${data.trait}
+Fear: ${data.fear}
+Bad habit: ${data.habit}
+Embarrassing moment: ${data.embarrassing}
+
+Rules:
+- Roast the user in a funny way
+- NO hate, NO slurs, NO discrimination
+- ONE short paragraph only
+- No questions, no explanations
+`;
+
+  const res = await fetch(
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-goog-api-key": "PASTE_YOUR_API_KEY_HERE"
+      },
+      body: JSON.stringify({
+        contents: [
+          { parts: [{ text: prompt }] }
+        ]
+      })
+    }
+  );
+
+  const json = await res.json();
+
+  const text =
+    json.candidates?.[0]?.content?.parts?.[0]?.text
+    || "No response";
+
+  output.innerText = text;
+}
+</script>
+
+</body>
+</html>
